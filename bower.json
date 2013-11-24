@@ -1,0 +1,16 @@
+{
+  "name": "scssLib",
+  "homepage": "https://github.com/signalwerk/scssLib",
+  "main": "src/*.scss",
+  "ignore": [
+    "app",
+    "bin",
+    "features",
+    "lib",
+    ".gitignore",
+    "Gemfile",
+    "Gemfile.lock",
+    "Rakefile",
+    "bourbon.gemspec"
+  ]
+}
