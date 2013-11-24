@@ -1,0 +1,165 @@
+
+$experimental-support-for-mozilla : true !default;
+$experimental-support-for-webkit : true !default;
+$support-for-original-webkit-gradients : true !default;
+$experimental-support-for-opera : true !default;
+$experimental-support-for-microsoft : true !default;
+$experimental-support-for-khtml : true !default;
+
+
+// from compass ramework
+// https://github.com/chriseppstein/compass
+// ----------------------------------------------------------
+
+@mixin experimental($property, $value,
+  $moz      : $experimental-support-for-mozilla,
+  $webkit   : $experimental-support-for-webkit,
+  $o        : $experimental-support-for-opera,
+  $ms       : $experimental-support-for-microsoft,
+  $khtml    : $experimental-support-for-khtml,
+  $official : true
+) {
+  @if $webkit  and $experimental-support-for-webkit    { -webkit-#{$property} : $value; }
+  @if $khtml   and $experimental-support-for-khtml     {  -khtml-#{$property} : $value; }
+  @if $moz     and $experimental-support-for-mozilla   {    -moz-#{$property} : $value; }
+  @if $ms      and $experimental-support-for-microsoft {     -ms-#{$property} : $value; }
+  @if $o       and $experimental-support-for-opera     {      -o-#{$property} : $value; }
+  @if $official                                        {         #{$property} : $value; }
+}
+
+
+// border-radius
+// ----------------------------------------------------------
+// http://css-tricks.com/snippets/css/useful-css3-less-mixins/
+
+@mixin border-radius ($topright: 0, $bottomright: 0, $bottomleft: 0, $topleft: 0) {
+
+  @include experimental(border-radius-topright,    $topright);
+  @include experimental(border-radius-bottomright, $bottomright);
+  @include experimental(border-radius-bottomleft,  $bottomleft);
+  @include experimental(border-radius-topleft,     $topleft);
+
+  -moz-background-clip:               padding; 
+  -webkit-background-clip:            padding-box; 
+  background-clip:                    padding-box; 
+}
+
+@mixin border-radius ($top : 0, $bottom : 0) {
+  @include border-radius($top, $top, $bottom, $bottom);
+}
+
+@mixin border-radius ($radius: 0) {
+  @include experimental(border-radius, $radius);
+
+  -moz-background-clip:    padding;
+  -webkit-background-clip: padding-box;
+  background-clip:         padding-box;
+}
+
+
+// transform
+// ----------------------------------------------------------
+@mixin transform($arguments) {
+  @include experimental(transform, $arguments);
+}
+
+// rotation
+// ----------------------------------------------------------
+@mixin rotation($deg : 0deg){
+  @include transform(rotate($deg));
+}
+
+// box-shadow
+// ----------------------------------------------------------
+@mixin box-shadow ($arguments) {
+    @include experimental(box-shadow, $arguments);
+}
+
+
+
+// Gradient stuff
+// ----------------------------------------------------------
+
+// https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/helpers/_gradient-positions-parser.scss
+@function _gradient-positions-parser($gradient-type, $gradient-positions) {
+  @if $gradient-positions
+  and ($gradient-type == linear)
+  and (type-of($gradient-positions) != color) {
+    $gradient-positions: _linear-positions-parser($gradient-positions);
+  }
+  @else if $gradient-positions
+  and ($gradient-type == radial)
+  and (type-of($gradient-positions) != color) {
+    $gradient-positions: _radial-positions-parser($gradient-positions);
+  }
+  @return $gradient-positions;
+}
+
+
+// https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/helpers/_render-gradients.scss
+// User for linear and radial gradients within background-image or border-image properties
+@function _render-gradients($gradient-positions, $gradients, $gradient-type, $vendor: false) {
+  $pre-spec: null;
+  $spec: null;
+  $vendor-gradients: null;
+  @if $gradient-type == linear {
+    @if $gradient-positions {
+      $pre-spec: nth($gradient-positions, 1);
+      $spec:     nth($gradient-positions, 2);
+    }
+  }
+  @else if $gradient-type == radial {
+    $pre-spec: nth($gradient-positions, 1);
+    $spec:     nth($gradient-positions, 2);
+  }
+
+  @if $vendor {
+    $vendor-gradients: -#{$vendor}-#{$gradient-type}-gradient(#{$pre-spec} $gradients);
+  }
+  @else if $vendor == false {
+    $vendor-gradients: "#{$gradient-type}-gradient(#{$spec} #{$gradients})";
+    $vendor-gradients: unquote($vendor-gradients);
+  }
+  @return $vendor-gradients;
+}
+
+// https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/css3/_linear-gradient.scss
+@mixin linear-gradient($pos, $G1, $G2: null,
+                       $G3: null, $G4: null,
+                       $G5: null, $G6: null,
+                       $G7: null, $G8: null,
+                       $G9: null, $G10: null,
+                       $fallback: null) {
+  // Detect what type of value exists in $pos
+  $pos-type: type-of(nth($pos, 1));
+  $pos-spec: null;
+  $pos-degree: null;
+
+  // If $pos is missing from mixin, reassign vars and add default position
+  @if ($pos-type == color) or (nth($pos, 1) == "transparent")  {
+    $G10: $G9; $G9: $G8; $G8: $G7; $G7: $G6; $G6: $G5;
+     $G5: $G4; $G4: $G3; $G3: $G2; $G2: $G1; $G1: $pos;
+     $pos: null;
+  }
+
+  @if $pos {
+    $positions: _linear-positions-parser($pos);
+    $pos-degree: nth($positions, 1);
+    $pos-spec:   nth($positions, 2);
+  }
+
+  $full: $G1, $G2, $G3, $G4, $G5, $G6, $G7, $G8, $G9, $G10;
+
+  // Set $G1 as the default fallback color
+  $fallback-color: nth($G1, 1);
+
+  // If $fallback is a color use that color as the fallback color
+  @if (type-of($fallback) == color) or ($fallback == "transparent") {
+    $fallback-color: $fallback;
+  }
+
+  background-color: $fallback-color;
+  background-image: -webkit-linear-gradient($pos-degree $full); // Safari 5.1+, Chrome
+  background-image: unquote("linear-gradient(#{$pos-spec}#{$full})");
+}
+

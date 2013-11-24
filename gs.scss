@@ -1,0 +1,207 @@
+
+// Inspiration for this grid system
+// ----------------------------------------------------------
+// http://matthewhartman.github.io/base/
+// http://matthewhartman.github.io/base/docs/grid.html
+// http://neat.bourbon.io/
+
+
+
+// Look and maybe include some ideas
+// http://www.creativebloq.com/design/building-modern-grid-system-5122962
+// http://foundation.zurb.com/docs/components/grid.html
+
+
+// Set a variable to run the if statement against
+$gsGrid: false !default;
+
+
+// Grid Settings
+// ----------------------------------------------------------
+
+// Global Defaults
+$mobile-container:              100%;
+$tablet-container:              720px;
+$desktop-container:             960px;
+
+
+// Resonsive Design Break Points
+$mobile-breakpoint:             $tablet-container + 19px;
+$tablet-breakpoint:             $tablet-container + 20px;
+$desktop-breakpoint:            $desktop-container + 39px;
+
+
+// 12-column grid
+$columns:                        12;        // count of columns
+$totalW:                         100%;      // total width
+$gutter:                         2%;        // gutter width
+$columnW:                        ($totalW - ($columns * $gutter)) / $columns;   // column width
+
+
+
+// print out the grid
+// ----------------------------------------------------------
+// https://github.com/thoughtbot/neat/blob/master/app/assets/stylesheets/grid/_visual-grid.scss
+// https://github.com/thoughtbot/neat/blob/master/app/assets/stylesheets/functions/_private.scss
+
+@mixin grid-column-gradient($values...) {
+  background-image: deprecated-webkit-gradient(linear, left top, left bottom, $values);
+  background-image:  -webkit-linear-gradient(left, $values);
+  background-image:     -moz-linear-gradient(left, $values);
+  background-image:      -ms-linear-gradient(left, $values);
+  background-image:       -o-linear-gradient(left, $values);
+  background-image: unquote("linear-gradient(left, #{$values})");
+}
+
+// Generates a striped background
+@function gradient-stops($grid-columns) {
+  $transparent: rgba(0,0,0,0);
+  $color: rgba(0,0,0,0.07);
+
+  $column-offset: $gutter/2;
+
+  $values: ($color 0, $transparent 0);
+
+  @for $i from 1 through $grid-columns {
+    @if is-odd($i) {
+      $values: append($values, $transparent $column-offset, comma);
+      $values: append($values, $color $column-offset, comma);
+      $column-offset: $column-offset + $columnW;
+    } 
+    @if is-even($i) {
+      $values: append($values, $color $column-offset, comma);
+      $values: append($values, $transparent $column-offset, comma);
+      $column-offset: $column-offset + $gutter;
+    }
+  }
+
+  @return $values;
+}
+
+
+
+// width calculation
+// ----------------------------------------------------------
+@function gridW($n : 1) {
+    @return  $columnW * $n + $gutter * ($n - 1);
+}
+
+
+// each grid definition gets this
+// ----------------------------------------------------------
+@mixin grid() {
+  display: inline;
+  float: left;
+  margin-left: $gutter / 2;
+  margin-right: $gutter / 2;
+}
+
+
+// prefix extra space
+// ----------------------------------------------------------
+@mixin prefix($n) {
+  @if $n > 0 {
+    padding-left: ($columnW + $gutter) * $n;
+  } @else {
+    padding-left: 0;
+  }
+}
+
+
+// Push Space
+// ----------------------------------------------------------
+@mixin push($n) {
+  position: relative;
+  left: ($columnW + $gutter) * $n;
+}
+
+
+// // Suffix Extra Space
+// // ----------------------------------------------------------
+// @mixin suffix($i) {
+//   padding-right: $cellW * $i;
+// }
+
+
+// // Pull Space 
+// // ----------------------------------------------------------
+// @mixin pull($i) {
+//   position: relative;
+//   left: 0 - ($cellW * $i);
+// }
+
+
+// generate the name for all grids
+// ----------------------------------------------------------
+@function gridSelector($start : 1, $end : $start,  $prefix : "") {
+    
+    $allSelectors: '';
+
+    @for $i from $start through $end {
+      $allSelectors: #{$allSelectors} + "." + #{$prefix} + "grid_" + #{$i};
+      @if $i < $end {
+        $allSelectors: #{$allSelectors + ", "};
+      }
+    }
+    @return $allSelectors;
+}
+
+// generate all the grid definitions
+// ----------------------------------------------------------
+@mixin generateAll($prefix : "") {
+
+  @for $i from 1 through $columns {
+
+    #{gridSelector($i, $i, $prefix)} {
+      width: gridW($i); 
+    }
+    .#{$prefix}prefix_#{$i - 1} {
+      @include prefix($i - 1); 
+    }
+    .#{$prefix}push_#{$i - 1} {
+      @include push($i - 1); 
+    }
+  }
+
+  #{gridSelector(1, $columns, $prefix)} {
+    @include grid();
+  }
+}
+
+@if $gsGrid {
+
+
+  .showGrid_12 {
+    /* mark */
+    @include grid-column-gradient(gradient-stops($columns));
+  }
+
+
+  // ==========================================================
+  // Desktop Devices
+  // ==========================================================
+  @include generateAll();
+  .no-desktop { display: none; }
+  .show-desktop { display: block; }
+
+  // ==========================================================
+  // Tablet Devices (Layout, Modifications, etc)
+  // ==========================================================
+  @media only screen and (min-width: $tablet-breakpoint) and (max-width: $desktop-breakpoint) {
+
+    @include generateAll("tablet_");
+    .no-tablet { display: none; }
+    .show-tablet { display: block; }
+  }
+
+  // ==========================================================
+  // Tablet Devices (Layout, Modifications, etc)
+  // ==========================================================
+  @media only screen and (max-width: $mobile-breakpoint) {
+
+    @include generateAll("mobile_");
+    .no-mobile { display: none; }
+    .show-mobile { display: block; }
+  }
+}
+

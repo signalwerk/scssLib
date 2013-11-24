@@ -1,0 +1,212 @@
+@charset "utf-8";
+
+
+@import "./css3.scss";
+// @import "./form.scss";
+@import "./gs.scss";
+
+
+// interestening shadow effects
+// http://www.paulund.co.uk/creating-different-css3-box-shadows-effects
+
+
+// ----------------------------------------------------------
+// signalwerk lib
+// ----------------------------------------------------------
+
+// std-Colors
+$cBlack: #000000;
+$cWhite: #ffffff; 
+$cTransparent: rgba(0, 0, 0, 0); 
+
+$gt_fontFamily:     Source Sans Pro, font-family("sans-serif");
+$gtbold_fontFamily: $gt_fontFamily;
+$gt_fontWeight:     400;
+$gtbold_fontWeight: 600;
+$baseFontSize: 13px;
+
+
+// beta boxing
+// ----------------------------------------------------------
+$cBeta: #00ff00;
+@mixin beta() {
+    background-color: $cBeta;
+}
+
+// get font-family fallback
+// ----------------------------------------------------------
+// https://github.com/adamstac/font-stacks/blob/master/stylesheets/font-stacks/_function.scss
+
+@function font-family($style) {
+
+  @if $style == "serif" {
+    @return "Times New Roman", Times, serif;
+  }
+
+  @else if $style == "sans-serif" {
+    @return "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  @else if $style == "monospace" {
+    @return Consolas, Menlo, Monaco, Courier, monospace;
+  }
+
+  @else {
+    @warn "The font-family you specified wasn't found. Serif has been returned instead.";
+    @return font-family("serif");
+  }
+}
+
+// mixin to get the fontface 
+// ----------------------------------------------------------
+@mixin declare-font-face(
+  $name,
+  $font-files,
+  $weight: 400,
+  $style: normal
+) {
+  @font-face {
+    font-family: quote($name);;
+    font-style: $style;
+    font-weight: $weight;
+      src: url('#{$font-files}.eot');
+      src: url('#{$font-files}.eot?#iefix') format('embedded-opentype'),
+           url('#{$font-files}.woff') format('woff'),
+           url('#{$font-files}.ttf') format('truetype'),
+           url('#{$font-files}.svg##{$name}') format('svg');
+  }
+}
+
+
+// ----------------------------------------------------------
+// font setup
+// ----------------------------------------------------------
+// example:
+// @import "#{$fileadminFontPath}/sourcesans/stylesheet400600.css";
+// @import %("%s/%s", $fileadminFontPath, "fontello/css/fontello.css");
+// @import %("%s/%s", $fileadminFontPath, "fontello/css/fontello-codes.css");
+// ----------------------------------------------------------
+
+
+// fontsetters
+// ----------------------------------------------------------
+@mixin gt() {
+  font-family: $gt_fontFamily;
+  font-weight: $gt_fontWeight;
+  // @include  letterspacing($value);
+}
+
+@mixin gtbold() {
+  font-family: $gtbold_fontFamily;
+  font-weight: $gtbold_fontWeight;
+
+  // @include letterspacing($value);
+}
+
+// Font Sizes (REMs with PX fallback for older browsers)
+@mixin font-size($size) {
+    @include rem(font-size, $size);
+}
+
+
+
+// http://css-tricks.com/snippets/css/less-mixin-for-rem-font-sizing/
+// ----------------------------------------------------------
+// ----------------------------------------------------------
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@mixin rem($property, $values...) {
+  $max: length($values);
+  $pxValues: '';
+  $remValues: '';
+
+  @for $i from 1 through $max {
+    $value: strip-unit(nth($values, $i));
+    $pxValues: #{$pxValues + $value}px;
+
+    @if $i < $max {
+      $pxValues: #{$pxValues + " "};
+    }
+  } 
+
+  @for $i from 1 through $max {
+    $value: strip-unit(nth($values, $i));
+    $remValues: #{$remValues + $value/$baseFontSize}rem;
+
+    @if $i < $max {
+      $remValues: #{$remValues + " "};
+    }
+  } 
+  
+  #{$property}: $pxValues; 
+  #{$property}: $remValues; 
+}
+// ----------------------------------------------------------
+// ----------------------------------------------------------
+
+
+@mixin letterspacingCtx($value: 0, $context: -1) {
+
+
+  @if $value != 0  {
+
+    letter-spacing: $value/1000em;
+
+    // because webkit can not render subpixels we round to one pixel for webkit
+    @if $context != -1 and unit($context) == "px" and $value/1000em < em(1px, $context) {
+      // if context is defined check for min letterspacing in webkit
+      @media screen and (-webkit-min-device-pixel-ratio:0)
+      { 
+          letter-spacing: em(1px, $context);
+      }
+    }
+  }
+}
+
+
+@mixin letterspacing($value: 0) {
+
+  @if $value != 0  {
+    letter-spacing: $value/1000em;
+  }
+}
+
+@mixin fontSize($size:12px, $lineHeight:18px) {
+  font-size: $size;
+  line-height: $lineHeight;
+}
+
+
+// convinience setters
+// ----------------------------------------------------------
+@mixin compact() {
+  margin: 0;
+  padding: 0;
+}
+
+@mixin li() {
+  @include compact();
+  float: left;
+  display: block;
+  // white-space: nowrap;
+}
+
+@mixin ul() {
+  position: relative;
+  left: 0px;
+  list-style-type: none;
+  @include compact();
+  // white-space: nowrap;
+}
+
+
+// convert px to em
+// ----------------------------------------------------------
+// https://gist.github.com/ijy/1441967
+// font-size: em(21px, 15px); // Outputs 1.4em
+@function em($target, $context: $base-font-size) {
+   @if $target == 0 { @return 0 }
+   @return $target / $context + 0em;
+}
