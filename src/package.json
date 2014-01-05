@@ -1,0 +1,13 @@
+{
+  "name": "scssLibSignalwerk",
+  "version": "1.0.0",
+  "description": "scssLib Signalwerk",
+  "repository": "",
+  "keywords": [],
+  "author": "Stefan Huber",
+  "license": "",
+  "dependencies": {
+    "grunt": "~0.4.1",
+    "grunt-sass": "~0.6.1"
+  }
+}
