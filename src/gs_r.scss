@@ -3,27 +3,28 @@
 // ----------------------------------------------------------
 // pure-css
 
-// for spacing hack see http://davidwalsh.name/remove-whitespace-inline-block
 
 $fix-lteIE7: false !default;    // IE 6 and below
 $fix-lteIE8: false !default;    // IE 7 and below
-$fix-lteIE9: true  !default;     // IE 8 and below
+$fix-lteIE9: true  !default;    // IE 8 and below
 
-$fix-opera:  false !default;      // all opera fixes
+$fix-opera:  false !default;    // all opera fixes
 
 $gt_fontFamily:     "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 
 
+// for spacing hack see http://davidwalsh.name/remove-whitespace-inline-block
 
 .grid-g {
-    letter-spacing: -0.31em; /* Webkit: collapse white-space between units */
+    letter-spacing: -0.31em;       // Webkit: collapse white-space between units 
 
-    @if $fix-lteIE8 { *letter-spacing: normal;  } // reset IE < 8
-    @if $fix-lteIE8 { *word-spacing: -0.43em; } // IE < 8: collapse white-space between units 
+    @if $fix-lteIE8 { 
+        *letter-spacing: normal;   // reset IE < 8
+        *word-spacing: -0.43em;    // IE < 8: collapse white-space between units 
+    }
 
-
-    text-rendering: optimizespeed; /* Webkit: fixes text-rendering: optimizeLegibility */
+    text-rendering: optimizespeed; // Webkit: fixes text-rendering: optimizeLegibility 
 
     /*
     Sets the font stack to fonts known to work properly with the above letter
@@ -53,7 +54,7 @@ $gt_fontFamily:     "Helvetica Neue", Helvetica, Arial, sans-serif;
     display: -webkit-flex;
     -webkit-flex-flow: row wrap;
 
-    /* IE10 uses display: flexbox */
+    // IE10 uses display: flexbox 
     display: -ms-flexbox;
     -ms-flex-flow: row wrap;
 }
@@ -109,7 +110,7 @@ this the same font stack that Normalize.css sets for the `body`.
 .grid-u-19-24,
 .grid-u-23-24 {
     display: inline-block;
-    @if $fix-lteIE8 { *display: inline; } /* IE < 8: fake inline-block */
+    @if $fix-lteIE8 { *display: inline; } // IE < 8: fake inline-block 
     zoom: 1;
     letter-spacing: normal;
     word-spacing: normal;
