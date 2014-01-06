@@ -1,42 +1,54 @@
-.grid-g {
+.grid-g, .grid-g-r {
   letter-spacing: -0.31em;
   text-rendering: optimizespeed;
   /*
-    Sets the font stack to fonts known to work properly with the above letter
-    and word spacings. See: https://github.com/yui/pure/issues/41/
+        Sets the font stack to fonts known to work properly with the above letter
+        and word spacings. See: https://github.com/yui/pure/issues/41/
 
-    The following font stack makes Pure Grids work on all known environments.
+        The following font stack makes Pure Grids work on all known environments.
 
-    * FreeSans: Ships with many Linux distros, including Ubuntu
+        * FreeSans: Ships with many Linux distros, including Ubuntu
 
-    * Arimo: Ships with Chrome OS. Arimo has to be defined before Helvetica and
-      Arial to get picked up by the browser, even though neither is available
-      in Chrome OS.
+        * Arimo: Ships with Chrome OS. Arimo has to be defined before Helvetica and
+          Arial to get picked up by the browser, even though neither is available
+          in Chrome OS.
 
-    * Droid Sans: Ships with all versions of Android.
+        * Droid Sans: Ships with all versions of Android.
 
-    * Helvetica, Arial, sans-serif: Common font stack on OS X and Windows.
-    */
+        * Helvetica, Arial, sans-serif: Common font stack on OS X and Windows.
+        */
   font-family: FreeSans, Arimo, "Droid Sans", Helvetica, Arial, sans-serif;
   /*
-    Use flexbox when possible to avoid `letter-spacing` side-effects.
+        Use flexbox when possible to avoid `letter-spacing` side-effects.
 
-    NOTE: Firefox (as of 25) does not currently support flex-wrap, so the
-    `-moz-` prefix version is omitted.
-    */
-  display: -webkit-flex;
-  -webkit-flex-flow: row wrap;
+        NOTE: Firefox (as of 25) does not currently support flex-wrap, so the
+        `-moz-` prefix version is omitted.
+        */
+  display: -webkit-box;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;
+  /* OLD - Firefox 19- (buggy but mostly works) */
   display: -ms-flexbox;
-  -ms-flex-flow: row wrap; }
+  /* TWEENER - IE 10 */
+  display: -webkit-flex;
+  /* NEW - Chrome */
+  display: flex;
+  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
 
 /* Opera as of 12 on Windows needs word-spacing.
-   The ".opera-only" selector is used to prevent actual prefocus styling
-   and is not required in markup.
-*/
+       The ".opera-only" selector is used to prevent actual prefocus styling
+       and is not required in markup.
+    */
 /*
-Resets the font family back to the OS/browser's default sans-serif font,
-this the same font stack that Normalize.css sets for the `body`.
-*/
+    Resets the font family back to the OS/browser's default sans-serif font,
+    this the same font stack that Normalize.css sets for the `body`.
+    */
 .grid-g [class*="grid-u"] {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
@@ -48,6 +60,12 @@ this the same font stack that Normalize.css sets for the `body`.
   vertical-align: top;
   text-rendering: auto; }
 
+.no-desktop {
+  display: none; }
+
+.show-desktop {
+  display: block; }
+
 .grid-u-1 {
   width: 100%; }
 
@@ -57,65 +75,65 @@ this the same font stack that Normalize.css sets for the `body`.
 .grid-u-1-3 {
   width: 33.3333%; }
 
-.grid-u-2-3 {
-  width: 66.6667%; }
-
 .grid-u-1-4 {
   width: 25%; }
-
-.grid-u-3-4 {
-  width: 75%; }
 
 .grid-u-1-5 {
   width: 20%; }
 
-.grid-u-2-5 {
-  width: 40%; }
-
-.grid-u-3-5 {
-  width: 60%; }
-
-.grid-u-4-5 {
-  width: 80%; }
-
 .grid-u-1-6 {
   width: 16.6667%; }
-
-.grid-u-5-6 {
-  width: 83.3333%; }
 
 .grid-u-1-8 {
   width: 12.5%; }
 
-.grid-u-3-8 {
-  width: 37.5%; }
-
-.grid-u-5-8 {
-  width: 62.5%; }
-
-.grid-u-7-8 {
-  width: 87.5%; }
-
 .grid-u-1-12 {
   width: 8.3333%; }
-
-.grid-u-5-12 {
-  width: 41.6667%; }
-
-.grid-u-7-12 {
-  width: 58.3333%; }
-
-.grid-u-11-12 {
-  width: 91.6667%; }
 
 .grid-u-1-24 {
   width: 4.1667%; }
 
+.grid-u-2-3 {
+  width: 66.6667%; }
+
+.grid-u-2-5 {
+  width: 40%; }
+
+.grid-u-3-4 {
+  width: 75%; }
+
+.grid-u-3-5 {
+  width: 60%; }
+
+.grid-u-3-8 {
+  width: 37.5%; }
+
+.grid-u-4-5 {
+  width: 80%; }
+
+.grid-u-5-5 {
+  width: 100%; }
+
+.grid-u-5-8 {
+  width: 62.5%; }
+
+.grid-u-5-12 {
+  width: 41.6667%; }
+
 .grid-u-5-24 {
   width: 20.8333%; }
 
+.grid-u-7-8 {
+  width: 87.5%; }
+
+.grid-u-7-12 {
+  width: 58.3333%; }
+
 .grid-u-7-24 {
   width: 29.1667%; }
+
+.grid-u-11-12 {
+  width: 91.6667%; }
 
 .grid-u-11-24 {
   width: 45.8333%; }
@@ -131,3 +149,137 @@ this the same font stack that Normalize.css sets for the `body`.
 
 .grid-u-23-24 {
   width: 95.8333%; }
+
+.no-desktop {
+  display: none; }
+
+.show-desktop {
+  display: block; }
+
+@media only screen and (min-width: 740px) and (max-width: 999px) {
+  .no-tablet {
+    display: none; }
+  .show-tablet {
+    display: block; }
+  .grid-u-1-tablet {
+    width: 100%; }
+  .grid-u-1-2-tablet {
+    width: 50%; }
+  .grid-u-1-3-tablet {
+    width: 33.3333%; }
+  .grid-u-1-4-tablet {
+    width: 25%; }
+  .grid-u-1-5-tablet {
+    width: 20%; }
+  .grid-u-1-6-tablet {
+    width: 16.6667%; }
+  .grid-u-1-8-tablet {
+    width: 12.5%; }
+  .grid-u-1-12-tablet {
+    width: 8.3333%; }
+  .grid-u-1-24-tablet {
+    width: 4.1667%; }
+  .grid-u-2-3-tablet {
+    width: 66.6667%; }
+  .grid-u-2-5-tablet {
+    width: 40%; }
+  .grid-u-3-4-tablet {
+    width: 75%; }
+  .grid-u-3-5-tablet {
+    width: 60%; }
+  .grid-u-3-8-tablet {
+    width: 37.5%; }
+  .grid-u-4-5-tablet {
+    width: 80%; }
+  .grid-u-5-5-tablet {
+    width: 100%; }
+  .grid-u-5-8-tablet {
+    width: 62.5%; }
+  .grid-u-5-12-tablet {
+    width: 41.6667%; }
+  .grid-u-5-24-tablet {
+    width: 20.8333%; }
+  .grid-u-7-8-tablet {
+    width: 87.5%; }
+  .grid-u-7-12-tablet {
+    width: 58.3333%; }
+  .grid-u-7-24-tablet {
+    width: 29.1667%; }
+  .grid-u-11-12-tablet {
+    width: 91.6667%; }
+  .grid-u-11-24-tablet {
+    width: 45.8333%; }
+  .grid-u-13-24-tablet {
+    width: 54.1667%; }
+  .grid-u-17-24-tablet {
+    width: 70.8333%; }
+  .grid-u-19-24-tablet {
+    width: 79.1667%; }
+  .grid-u-23-24-tablet {
+    width: 95.8333%; } }
+
+@media only screen and (max-width: 739px) {
+  .no-mobile {
+    display: none; }
+  .show-mobile {
+    display: block; }
+  .grid-u-1-mobile {
+    width: 100%; }
+  .grid-u-1-2-mobile {
+    width: 50%; }
+  .grid-u-1-3-mobile {
+    width: 33.3333%; }
+  .grid-u-1-4-mobile {
+    width: 25%; }
+  .grid-u-1-5-mobile {
+    width: 20%; }
+  .grid-u-1-6-mobile {
+    width: 16.6667%; }
+  .grid-u-1-8-mobile {
+    width: 12.5%; }
+  .grid-u-1-12-mobile {
+    width: 8.3333%; }
+  .grid-u-1-24-mobile {
+    width: 4.1667%; }
+  .grid-u-2-3-mobile {
+    width: 66.6667%; }
+  .grid-u-2-5-mobile {
+    width: 40%; }
+  .grid-u-3-4-mobile {
+    width: 75%; }
+  .grid-u-3-5-mobile {
+    width: 60%; }
+  .grid-u-3-8-mobile {
+    width: 37.5%; }
+  .grid-u-4-5-mobile {
+    width: 80%; }
+  .grid-u-5-5-mobile {
+    width: 100%; }
+  .grid-u-5-8-mobile {
+    width: 62.5%; }
+  .grid-u-5-12-mobile {
+    width: 41.6667%; }
+  .grid-u-5-24-mobile {
+    width: 20.8333%; }
+  .grid-u-7-8-mobile {
+    width: 87.5%; }
+  .grid-u-7-12-mobile {
+    width: 58.3333%; }
+  .grid-u-7-24-mobile {
+    width: 29.1667%; }
+  .grid-u-11-12-mobile {
+    width: 91.6667%; }
+  .grid-u-11-24-mobile {
+    width: 45.8333%; }
+  .grid-u-13-24-mobile {
+    width: 54.1667%; }
+  .grid-u-17-24-mobile {
+    width: 70.8333%; }
+  .grid-u-19-24-mobile {
+    width: 79.1667%; }
+  .grid-u-23-24-mobile {
+    width: 95.8333%; } }
+
+@media (max-width: 999px) {
+  .grid-g-r > .grid-u, .grid-g-r > [class*="grid-u-"] {
+    width: 100%; } }
