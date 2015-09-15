@@ -138,7 +138,7 @@ $columnW:                        ($totalW - ($columns * $gutter)) / $columns;   
     $allSelectors: '';
 
     @for $i from $start through $end {
-      $allSelectors: #{$allSelectors} + "." + #{$prefix} + "grid_" + #{$i};
+      $allSelectors: (#{$allSelectors}) + "." + (#{$prefix}) + "grid_" + (#{$i});
       @if $i < $end {
         $allSelectors: #{$allSelectors + ", "};
       }
